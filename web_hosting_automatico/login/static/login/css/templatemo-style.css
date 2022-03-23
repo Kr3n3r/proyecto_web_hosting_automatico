@@ -33,12 +33,12 @@ a:focus {
 }
 
 h1 {
-	color: #6EDCD9;
+	color: #F0F0F0;
 	font-size: 4rem;	
 }
 
 p {
-	color: #6EDCD9;	
+	color: #F0F0F0;	
 }
 
 #particles-js {
@@ -48,7 +48,7 @@ p {
     z-index: 1000;
     width: 100%;
     height: 99%;
-    background-color: #9254C8 ;
+    /* background-color: #9254C8 ; */
 }
 
 .cb-slideshow-text-container {
@@ -62,27 +62,27 @@ p {
 }
 
 .form-control::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: #6EDCD9;
+  color: #F0F0F0;
 }
 .form-control::-moz-placeholder { /* Firefox 19+ */
-  color: #6EDCD9;
+  color: #F0F0F0;
 }
 .form-control:-ms-input-placeholder { /* IE 10+ */
-  color: #6EDCD9;
+  color: #F0F0F0;
 }
 .form-control:-moz-placeholder { /* Firefox 18- */
-  color: #6EDCD9;
+  color: #F0F0F0;
 }
 
 .form-control::placeholder {
-    color: #6EDCD9;
+    color: #F0F0F0;
 }
 
 .form-control {  
-    color: #6EDCD9;
+    color: #F0F0F0;
     border-radius: .5rem;
     background-color: transparent;
-    border: 1px solid #6EDCD9;
+    border: 1px solid #F0F0F0;
     padding-top: 10px;
     padding-bottom: 10px;
     font-size: 1.4rem;
@@ -91,19 +91,19 @@ p {
 }
 
 .form-section {  
-    color: #6EDCD9;
+    color: #F0F0F0;
     background-color: transparent;
     margin-bottom: 100px;
     
 }
 
 .contact_email {
-	color: #6EDCD9;
+	color: #F0F0F0;
 }
 .tm-btn-subscribe {
 	background-color: #006699;
 	border-radius: .5rem;
-    border-color:#6EDCD9;
+    border-color:#F0F0F0;
 	padding: 0.75rem 1.6rem;
     font-weight: 300;
     font-size: 1.4rem;
@@ -143,7 +143,7 @@ p {
     z-index: 1001;
 }
 
-/* Animation 
+/* Animation */
 .cb-slideshow,
 .cb-slideshow:after {
     position: fixed;
@@ -166,7 +166,7 @@ p {
     background-repeat: none;
     opacity: 0;
     z-index: 0;
-    -webkit-backface-visibility: hidden;
+    /* -webkit-backface-visibility: hidden; */
     -webkit-animation: imageAnimation 72s linear infinite 0s;
     -moz-animation: imageAnimation 72s linear infinite 0s;
     -o-animation: imageAnimation 72s linear infinite 0s;
@@ -175,7 +175,7 @@ p {
 
 }
 
-
+/* 
 .cb-slideshow li:nth-child(1) { 
     background-image: url(../img/letter_bg_06.jpg)
 }
@@ -206,7 +206,7 @@ p {
 .cb-slideshow li:nth-child(6) { 
     background-image: url(../img/letter_bg_06.jpg);
     animation-delay: 60s; 
-} 
+}  */
 
 
 @keyframes imageAnimation { 
@@ -248,4 +248,3 @@ p {
 		margin-top: 20px;
 	}
 } 
-*/

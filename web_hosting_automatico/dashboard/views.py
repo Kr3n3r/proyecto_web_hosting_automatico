@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.shortcuts import redirect, render
 import django.contrib.auth
 
@@ -50,3 +51,13 @@ def logout(request):
         
 #     }
 #     return render(request, 'dashboard/404.html', context)
+
+def add_new_server(request):
+    try:
+        username = request.session['user']
+    except:
+        redirect('login')
+    context = {
+        
+    }
+    return render(request, 'dashboard/add_new_server.html', context)
