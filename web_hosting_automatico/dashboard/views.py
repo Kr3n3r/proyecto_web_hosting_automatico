@@ -58,6 +58,8 @@ def add_new_server(request):
     except:
         redirect('login')
     context = {
+        'cms_type' : Servidor.CMS,
+        'server_type' : Servidor.SERVER_TYPES,
         
     }
     return render(request, 'dashboard/add_new_server.html', context)
