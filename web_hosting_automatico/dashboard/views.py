@@ -63,3 +63,24 @@ def add_new_server(request):
         
     }
     return render(request, 'dashboard/add_new_server.html', context)
+
+from .forms import formulario_añadir_nuevo_servidor
+from django.forms.utils import ErrorList
+class div_invalidfeedback(ErrorList):  
+    def __str__(self):
+            return self.as_divs()
+    def as_divs(self):
+            if self: 
+                return '<div class="invalid-feedback">%s</div>' % ''.join(['%s' % e for e in self])
+            return ''
+
+def añadir_nuevo_servidor(request):
+    if request.method == 'POST' :
+        form = formulario_añadir_nuevo_servidor(data=request.POST, error_class=div_invalidfeedback)
+        if form.is_valid():
+            return render(request, 'dashboard/index.html', {})
+        else:
+            return render(request, 'dashboard/add_new_server.html', {'form' : form})
+    elif request.method == 'GET':
+        form = formulario_añadir_nuevo_servidor()
+    return render(request, 'dashboard/add_new_server.html', {'form' : form})

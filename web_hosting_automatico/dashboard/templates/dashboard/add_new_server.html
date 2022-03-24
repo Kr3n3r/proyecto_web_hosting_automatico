@@ -32,92 +32,26 @@
                     <div class="form-items">
                         <h3>Formulario de registro de nuevo sitio</h3>
                         <p>Rellena los siguientes campos.</p>
-                        <form class="requires-validation" novalidate>
+                        <form class="requires-validation" action='.' method='POST'>
                             {% csrf_token %}
-                            <div class="col-md-12">
-                               <input class="form-control" type="text" name="name" placeholder="Nombre completo del sitio: www.ejemplo.org" required>
-                               <div class="valid-feedback">El nombre del sitio es válido</div>
-                               <div class="invalid-feedback">El nombre del sitio NO es válido</div>
-                            </div>
-                            <div class="col-md-12">
-                                <select class="form-select mt-3" placeholder='Tipo de CMS' name='cms_type' required>
-                                      <option selected disabled value="">Tipo de CMS</option>
-                                      {% for type in cms_type %}
-                                        <option value="{{ type.1 }}">{{ type.1 }}</option>
-                                      {% endfor %}
-                               </select>
-                                <div class="valid-feedback">You selected a position!</div>
-                                <div class="invalid-feedback">Please select a position!</div>
-                            </div>
-                            <div class="col-md-12">
-                                <select class="form-select mt-3" required>
-                                      <option selected disabled value="">Tipo de Servidor</option>
-                                      {% for type in server_type %}
-                                        <option value="{{ type.1 }}">{{ type.1 }}</option>
-                                      {% endfor %}
-                               </select>
-                                <div class="valid-feedback">You selected a position!</div>
-                                <div class="invalid-feedback">Please select a position!</div>
-                            </div>
-                            <div class="col-md-12">
-                                <input class="form-control" type="password" name="password" placeholder="Password" required>
-                                 <div class="valid-feedback">La contaseña es válida!</div>
-                                 <div class="invalid-feedback">La contraseña no se puede dejar en blanco!</div>
-                            </div>
-
-                            {% comment %} <div class="col-md-12">
-                                <input class="form-control" type="text" name="name" placeholder="Full Name" required>
-                                <div class="valid-feedback">Username field is valid!</div>
-                                <div class="invalid-feedback">Username field cannot be blank!</div>
-                             </div>
-    
-                            <div class="col-md-12">
-                                <input class="form-control" type="email" name="email" placeholder="E-mail Address" required>
-                                 <div class="valid-feedback">Email field is valid!</div>
-                                 <div class="invalid-feedback">Email field cannot be blank!</div>
-                            </div>
-    
-                           <div class="col-md-12">
-                                <select class="form-select mt-3" required>
-                                      <option selected disabled value="">Position</option>
-                                      <option value="jweb">Junior Web Developer</option>
-                                      <option value="sweb">Senior Web Developer</option>
-                                      <option value="pmanager">Project Manager</option>
-                               </select>
-                                <div class="valid-feedback">You selected a position!</div>
-                                <div class="invalid-feedback">Please select a position!</div>
-                           </div>
-    
-    
-                           <div class="col-md-12">
-                              <input class="form-control" type="password" name="password" placeholder="Password" required>
-                               <div class="valid-feedback">Password field is valid!</div>
-                               <div class="invalid-feedback">Password field cannot be blank!</div>
-                           </div>
-    
-    
-                           <div class="col-md-12 mt-3">
-                            <label class="mb-3 mr-1" for="gender">Gender: </label>
-    
-                            <input type="radio" class="btn-check" name="gender" id="male" autocomplete="off" required>
-                            <label class="btn btn-sm btn-outline-secondary" for="male">Male</label>
-    
-                            <input type="radio" class="btn-check" name="gender" id="female" autocomplete="off" required>
-                            <label class="btn btn-sm btn-outline-secondary" for="female">Female</label>
-    
-                            <input type="radio" class="btn-check" name="gender" id="secret" autocomplete="off" required>
-                            <label class="btn btn-sm btn-outline-secondary" for="secret">Secret</label>
-                               <div class="valid-feedback mv-up">You selected a gender!</div>
-                                <div class="invalid-feedback mv-up">Please select a gender!</div>
-                            </div> {% endcomment %}
-                        <br>
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
-                          <label class="form-check-label">Acepto las condiciones de uso y tratamiento de mis datos</label>
-                         <div class="invalid-feedback">Por favor, acepta nuestras condiciones de uso y tratamiento de datos</div>
-                        </div>
-                  
-    
+                            {{ form.as_p }}
+                            {% comment %} {% for field in form.fields %}
+                            {% if field.choices %}
+                                <div class="col-md-12">
+                                    <select class="form-select mt-3" required>
+                                        <option selected disabled hidden value="">Tipo de Servidor</option>
+                                        {% for type in server_type %}
+                                            <option value="{{ type.1 }}">{{ type.1 }}</option>
+                                        {% endfor %}
+                                </select>
+                                    <div class="valid-feedback">You selected a position!</div>
+                                    <div class="invalid-feedback">Please select a position!</div>
+                                </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% for error in form.errors %}
+                            <p style='color : #FFF'>Error en el campo : {{ error }}</p>
+                            {% endfor %} {% endcomment %}
                             <div class="form-button mt-3">
                                 <button id="submit" type="submit" class="btn btn-primary">Register</button>
                             </div>

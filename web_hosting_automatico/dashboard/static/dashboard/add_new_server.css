@@ -142,8 +142,16 @@ html, body {
 
 .invalid-feedback{
     color: #ff606e;
+    /* Modificaciones */
+    display: block;
+    margin-bottom: 30px;
 }
 
 .valid-feedback{
    color: #2acc80;
+}
+
+/* Estilos propios */
+li {
+    color : #FFF;
 }
