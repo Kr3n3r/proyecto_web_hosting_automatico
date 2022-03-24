@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'dashboard',
     'login',
     'localflavor',
+    'bootstrap5',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -124,3 +125,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Session options
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
