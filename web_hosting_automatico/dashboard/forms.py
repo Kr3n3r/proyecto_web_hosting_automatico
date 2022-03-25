@@ -20,7 +20,7 @@ class formulario_añadir_nuevo_servidor(forms.Form):
         label_suffix='', 
         error_messages={
             'required' : 'Este campo es requerido',
-            'invalid_choice' : 'La opción seleccionada es inválida'
+            'invalid_choice' : 'Jaja pillín, creías que podrías hackear este formulario'
             }, 
         validators=[]
     )
@@ -29,7 +29,7 @@ class formulario_añadir_nuevo_servidor(forms.Form):
         required=True,
         error_messages={
             'required' : 'Este campo es requerido',
-            'invalid_choice' : 'La opción seleccionada es inválida'
+            'invalid_choice' : 'Jaja pillín, creías que podrías hackear este formulario'
         },
         validators=[])
     cpanel_password = forms.CharField(
