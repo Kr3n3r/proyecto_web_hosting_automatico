@@ -52,3 +52,5 @@ docs/_build/
 # mine
 .venv/*
 .venvwindows/*
+web_hosting_automatico/dashboard/__pycache__/models.cpython-310.pyc
+web_hosting_automatico/dashboard/__pycache__/views.cpython-310.pyc
