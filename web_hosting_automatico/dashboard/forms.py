@@ -86,7 +86,16 @@ class formulario_añadir_nuevo_servidor(forms.Form):
     }
     
     def name_is_valid(self):
-        existing_names = Servidor.objects.filter(name=self.data['name'])
+        import re
+        
+        name = self.data['name']
+        if re.match(r'^www.[].',name) :
+            pass
+        existing_names = Servidor.objects.filter(name=name)
         if existing_names is not None:
-            return 
-        self.add_error('name', 'Este nombre ya existe')
+            self.add_error('name', 'Este nombre ya existe')
+        return self
+
+    def validate(self):
+        self = self.name_is_valid()
+        return self
