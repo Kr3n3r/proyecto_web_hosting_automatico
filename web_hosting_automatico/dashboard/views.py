@@ -77,8 +77,8 @@ class div_invalidfeedback(ErrorList):
 def añadir_nuevo_servidor(request):
     if request.method == 'POST' :
         form = formulario_añadir_nuevo_servidor(data=request.POST, error_class=div_invalidfeedback)
-        form = form.name_is_valid()
-        if form.is_valid():
+        form.name_is_valid()
+        if form.is_valid() :
             return render(request, 'dashboard/index.html', {})
         else:
             return render(request, 'dashboard/add_new_server.html', {'form' : form})

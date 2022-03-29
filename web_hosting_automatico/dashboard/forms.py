@@ -11,7 +11,7 @@ class formulario_añadir_nuevo_servidor(forms.Form):
         strip=False,
         empty_value='',
         required=True, 
-        widget=None,
+        widget=forms.TextInput(attrs={'autocomplete':'off'}),
         label='Nombre del servidor', 
         initial='www.ejemplo.es',
         # help_text='Aquí debes introducir el nombre de la URL que quieres que tu sitio adopte', se puede introducir pero se debe adaptar el html
@@ -84,3 +84,9 @@ class formulario_añadir_nuevo_servidor(forms.Form):
     widgets = {
         'cpanel_password' : forms.PasswordInput(),
     }
+    
+    def name_is_valid(self):
+        existing_names = Servidor.objects.filter(name=self.data['name'])
+        if existing_names is not None:
+            return 
+        self.add_error('name', 'Este nombre ya existe')
