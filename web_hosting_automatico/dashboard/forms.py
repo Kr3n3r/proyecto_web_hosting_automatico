@@ -29,7 +29,7 @@ class formulario_añadir_nuevo_servidor(forms.Form):
     cms_type = forms.ChoiceField(
         choices=Servidor.CMS, 
         required=True, 
-        widget=None,
+        widget=forms.Select(attrs={'class':'form-select mt-3'}),
         label='Tipo de CMS',
         initial=None, # por defecto coge el primero
         help_text='',
@@ -89,8 +89,8 @@ class formulario_añadir_nuevo_servidor(forms.Form):
         import re
         
         name = self.data['name']
-        if re.match(r'^www.[].',name) :
-            pass
+        # if re.match(r'^www.[].[es|com|au]',name) :
+        #     pass
         existing_names = Servidor.objects.filter(name=name)
         if existing_names is not None:
             self.add_error('name', 'Este nombre ya existe')
