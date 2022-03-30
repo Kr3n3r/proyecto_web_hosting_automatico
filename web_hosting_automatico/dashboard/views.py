@@ -1,6 +1,7 @@
 from multiprocessing import context
 from django.shortcuts import redirect, render
 import django.contrib.auth
+from re import *
 
 # Create your views here.
 from django.http import HttpResponse
@@ -18,10 +19,13 @@ def index(request):
         username = request.session['user']
     except:
         return redirect('login')
+    os = request.META['HTTP_USER_AGENT']
+    os = search(r'[w,W][i,I][n,N][d,D][o,O][w,W][s,S]',os.lower())
     server_list = Servidor.objects.filter(user_admin=username)
     return render(request, 'dashboard/index.html', {
         'user_name' : request.session['user'],
         'server_list' : server_list,
+        'os' : os,
     })
 
 def delete_item(request,id):
