@@ -91,8 +91,8 @@ class formulario_añadir_nuevo_servidor(forms.Form):
         name = self.data['name']
         # if re.match(r'^www.[].[es|com|au]',name) :
         #     pass
-        existing_names = Servidor.objects.filter(name=name)
-        if existing_names is not None:
+        existing_names = Servidor.objects.filter(name__exact=name).exists()
+        if existing_names :
             self.add_error('name', 'Este nombre ya existe')
         return self
 

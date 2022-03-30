@@ -14,4 +14,5 @@ class Test_Case_Formulario_añadir_nuevo_servidor(TestCase) :
             'server_type' : 1,
             'cpanel_password' : '12345678',
         })
-        form = form.validate()
+        form.validate()
+        self.assertEqual(len(form.errors), 1)
