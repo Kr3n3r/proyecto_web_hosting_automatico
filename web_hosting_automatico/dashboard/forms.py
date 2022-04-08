@@ -86,8 +86,7 @@ class formulario_añadir_nuevo_servidor(forms.Form):
     }
     
     def name_is_valid(self):
-        import re
-        
+        # import re
         name = self.data['name']
         # if re.match(r'^www.[].[es|com|au]',name) :
         #     pass

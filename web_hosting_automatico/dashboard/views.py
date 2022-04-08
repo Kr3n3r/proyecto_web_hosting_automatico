@@ -4,7 +4,7 @@ import django.contrib.auth
 from re import *
 
 # Create your views here.
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.template import loader
 from .models import Servidor, Usuario
 
@@ -89,3 +89,8 @@ def añadir_nuevo_servidor(request):
     elif request.method == 'GET':
         form = formulario_añadir_nuevo_servidor()
     return render(request, 'dashboard/add_new_server.html', {'form' : form})
+
+# def user_is_valid(request):
+#     if Usuario.objects.filter(username=request['username']).exists():
+#         return Http404('invalid')
+#     return HttpResponse()
