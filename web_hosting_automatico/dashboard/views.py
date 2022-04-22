@@ -89,3 +89,15 @@ def añadir_nuevo_servidor(request):
     elif request.method == 'GET':
         form = formulario_añadir_nuevo_servidor()
     return render(request, 'dashboard/add_new_server.html', {'form' : form})
+
+def añadir_nuevo_servidor_old(request):
+    if request.method == 'POST' :
+        form = formulario_añadir_nuevo_servidor(data=request.POST, error_class=div_invalidfeedback)
+        form.validate()
+        if form.is_valid() :
+            return render(request, 'dashboard/index.html', {})
+        else:
+            return render(request, 'dashboard/add_new_server_not.html', {'form' : form})
+    elif request.method == 'GET':
+        form = formulario_añadir_nuevo_servidor()
+    return render(request, 'dashboard/add_new_server_not.html', {'form' : form})

@@ -11,7 +11,7 @@ class formulario_añadir_nuevo_servidor(forms.Form):
         strip=False,
         empty_value='',
         required=True, 
-        widget=forms.TextInput(attrs={'autocomplete':'off'}),
+        widget=forms.TextInput(attrs={'autocomplete':'off', 'class':'form-control'}),
         label='Nombre del servidor', 
         initial='www.ejemplo.es',
         # help_text='Aquí debes introducir el nombre de la URL que quieres que tu sitio adopte', se puede introducir pero se debe adaptar el html
@@ -66,7 +66,7 @@ class formulario_añadir_nuevo_servidor(forms.Form):
         strip=False,
         empty_value='',
         required=True,
-        widget=forms.PasswordInput, 
+        widget=forms.PasswordInput(attrs={'class':'form-control'}),
         label='Contraseña del panel',
         initial='',
         help_text='',
