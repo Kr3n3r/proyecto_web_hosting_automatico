@@ -7,7 +7,7 @@ from .models import Servidor, Usuario
 # ie : probar el display de errores de validación, etc
 
 class Test_Case_Formulario_añadir_nuevo_servidor(TestCase) :
-    def test_errores(self):
+    def test_formulario_muestra_errores_nombre_duplicado(self):
         from dashboard.forms import formulario_añadir_nuevo_servidor
         from dashboard.models import Servidor,Usuario
         usuario = Usuario(
