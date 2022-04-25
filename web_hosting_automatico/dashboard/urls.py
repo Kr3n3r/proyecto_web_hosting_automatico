@@ -9,4 +9,5 @@ urlpatterns = [
     path('add/', views.añadir_nuevo_servidor, name='add_new_server'),
     path('old', views.añadir_nuevo_servidor_old, name='add_new_server_old'),
     # path('not_found/', views.not_found, name='not found')
+    # path('<str:username>/', views.user_is_valid, name='user_is_valid'),
 ]
