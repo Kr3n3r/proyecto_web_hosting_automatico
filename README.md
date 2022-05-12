@@ -30,7 +30,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/Kr3n3r/proyecto_web_hosting_automatico/blob/main/web_hosting_automatico/dashboard/static/dashboard/icono.png">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://github.com/Kr3n3r/proyecto_web_hosting_automatico/blob/main/web_hosting_automatico/dashboard/static/dashboard/icono.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">project_title</h3>
