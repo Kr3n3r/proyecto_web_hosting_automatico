@@ -1,0 +1,7 @@
+---
+- name: Instalación del Panel de Control
+  hosts: {{ host }}
+  become: yes
+
+  roles:
+    - common

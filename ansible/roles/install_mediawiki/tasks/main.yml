@@ -1,0 +1,43 @@
+---
+- name: Creación de la base de datos
+  mysql_db: name={{ mysql_db }} login_host={{ db_ip }} state=present collation=utf8_general_ci login_user={{ mysql_user }} login_password={{ mysql_password }}
+- name: Creación del usuario de la base de datos
+  mysql_user: name={{ mysql_new_user }} password={{ mysql_new_password }} host="%" priv="{{ mysql_db }}.*:ALL" login_host={{ db_ip }} login_user={{ mysql_user }} login_password={{ mysql_password }} state=present
+- name: Descarga de mediawiki
+  get_url:
+    url: https://releases.wikimedia.org/mediawiki/1.32/mediawiki-1.32.1.tar.gz
+    dest: /tmp
+- name: Descomprimimos los ficheros
+  unarchive:
+    src: /tmp/mediawiki-1.32.1.tar.gz
+    dest: /tmp
+- name: Copiamos los ficheros
+  synchronize:
+    src: /tmp/mediawiki-1.32.1/
+    dest: /var/www/html/{{ domain }}
+    recursive: True
+- name: Instalacion con script php
+  command: >
+    php /var/www/html/{{ domain }}/maintenance/install.php 
+    --dbname={{ mysql_db }} 
+    --dbserver={{ db_ip}} 
+    --installdbuser={{ mysql_new_user }} 
+    --installdbpass={{ mysql_new_password }} 
+    --dbuser={{ mysql_new_user }} 
+    --dbpass={{ mysql_new_password }} 
+    --dbprefix="md_" 
+    --server="http://www.{{ domain }}.com" 
+    --lang=es 
+    --scriptpath="" 
+    --pass={{ admin_password }} "{{ site_name }}" "{{ admin_user }}"
+- name: Cambiamos permisos mediawiki
+  file:
+    dest: /var/www/html/{{ domain }}
+    owner: www-data
+    group: www-data
+    recurse: yes
+- name: Borramos el index.html de mediawiki
+  file:
+    path: /var/www/html/{{ domain }}/index.html
+    state: absent
+  notify: restart apache

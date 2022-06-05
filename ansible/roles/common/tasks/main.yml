@@ -1,0 +1,40 @@
+---
+- name: Actualizar lista de paquetes
+  apt: update_cache=yes
+- name : Instalo paquetes para añadir repo
+  apt : pkg={{ item }}
+  with_items:
+    - software-properties-common
+- name : Añado repositorio
+  apt_repository: 
+        repo="ppa:ondrej/php" 
+        update_cache=yes
+- name: Instalar paquetes necesarios
+  apt: pkg={{ item }}
+  with_items:
+    - apache2
+    - pip
+    - redis-server
+    - git
+    - ansible
+    - python3-mysqldb
+    - php7.4
+    - mariadb-server
+    - mariadb-client
+    - unzip
+    - apache2-utils
+    - php7.4-dom
+    - php7.4-gd
+    - php7.4-xml
+    - php7.4-mbstring
+    - php7.4-mysql
+    - php7.4-common
+    - php7.4-curl
+    - php7.4-zip
+    - php7.4-mcrypt
+    - php7.4-xml
+    - php7.4-cli
+    - php7.4-apcu
+    - php7.4-intl
+- name : Instalar módulo de pip
+  pip: name=pymysql

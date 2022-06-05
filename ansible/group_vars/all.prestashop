@@ -1,0 +1,18 @@
+---
+
+domain: miprimeraweb
+
+db_ip : dbprueba.cfsjy7ys8tan.eu-west-2.rds.amazonaws.com
+mysql_db: prestashop_db
+mysql_user: admin
+mysql_password: 1qaz.WSX
+mysql_new_user : prestashop_user
+mysql_new_password : prestashop_user
+
+site_name: Mi tienda web
+admin_user: "Alejandro Mármol"
+admin_password: password
+name_user: alejandro
+surname_user: marmol
+
+server: prueba

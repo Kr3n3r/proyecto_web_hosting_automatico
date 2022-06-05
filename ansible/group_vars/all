@@ -1,0 +1,18 @@
+---
+
+domain: miprimeraweb
+
+db_ip : dbprueba.cfsjy7ys8tan.eu-west-2.rds.amazonaws.com
+mysql_db: prueba
+mysql_user: admin
+mysql_password: 1qaz.WSX
+mysql_new_user : primerawb_user
+mysql_new_password : primeraweb
+
+site_name: "Mi primera pagina web"
+admin_user: "Francisco Romero"
+admin_password: pruebaansible
+name_user: francisco
+surname_user: romero
+
+server: prueba

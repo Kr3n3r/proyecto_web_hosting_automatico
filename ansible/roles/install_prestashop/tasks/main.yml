@@ -1,0 +1,61 @@
+---
+- name: Creación de la base de datos
+  mysql_db: name={{ mysql_db }} login_host={{ db_ip }} state=present collation=utf8_general_ci login_user={{ mysql_user }} login_password={{ mysql_password }}
+- name: Creación del usuario de la base de datos
+  mysql_user: name={{ mysql_new_user }} password={{ mysql_new_password }} host="%" priv="{{ mysql_db }}.*:ALL" login_host={{ db_ip }} login_user={{ mysql_user }} login_password={{ mysql_password }} state=present
+- name: Descarga de prestashop
+  get_url:
+    url: https://download.prestashop.com/download/releases/prestashop_1.7.4.2.zip
+    dest: /tmp
+- name: Descomprimimos los ficheros
+  unarchive:
+    src: /tmp/prestashop_1.7.4.2.zip
+    dest: /tmp
+- name: Descomprimimos los ficheros
+  unarchive:
+    src: /tmp/prestashop.zip
+    dest: /var/www/html/{{ domain }}
+    owner: www-data
+    group: www-data
+- name: Instalacion con script php
+  command: >
+    php /var/www/html/{{ domain }}/install/index_cli.php 
+    --domain=www.{{ domain }}.com 
+    --db_server={{ db_ip }} 
+    --db_name={{ mysql_db }} 
+    --db_user={{ mysql_new_user }} 
+    --db_password={{ mysql_new_password }} 
+    --theme=classic 
+    --language=es 
+    --email={{ name_user }}@{{ domain }}.com 
+    --first-name={{ name_user }} 
+    --second-name={{ surname_user }}
+    --timezone=Europe/Madrid
+    --name={{ site_name }}
+    --country=ES
+    --password={{ admin_password }}
+    --prefix=ps_
+
+- name : Cambiar el nombre de la tienda
+  community.mysql.mysql_query:
+    login_db: "{{ mysql_db }}"
+    login_host: "{{ db_ip }}"
+    login_user: "{{ mysql_new_user }}"
+    login_password: "{{ mysql_new_password }}"
+    query: UPDATE ps_configuration SET value = '{{ site_name }}' WHERE name = 'PS_SHOP_NAME'
+    single_transaction: yes
+- name: Cambiamos permisos prestashop
+  file:
+    dest: /var/www/html/{{ domain }}
+    owner: www-data
+    group: www-data
+    recurse: yes
+- name: Borramos el index.html de prestashop
+  file:
+    path: /var/www/html/{{ domain }}/index.html
+    state: absent
+  notify: restart apache
+- name : Borrar la carpeta de instalación
+  ansible.builtin.file:
+    path : /var/www/html/{{ domain }}/install
+    state : absent

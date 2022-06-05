@@ -1,0 +1,25 @@
+---
+- name : Borrar la carpeta de sitio web
+  ansible.builtin.file:
+    path : /var/www/html/{{ domain }}
+    state : absent
+- name: Crear directorio root
+  file:
+    path: /var/www/html/{{ domain }}
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: 0775
+- name: Copiar el index.html
+  template: >
+    src=index.html
+    dest=/var/www/html/{{ domain }}/index.html
+- name: Copiar el virtualhost
+  template: >
+    src=virtualhost.conf
+    dest=/etc/apache2/sites-available/{{ domain }}.conf
+- name: Deshabilitamos el virtualhost por defecto   
+  command: a2dissite 000-default.conf
+- name: Habilitamos el virtualhost nuevo
+  command: a2ensite {{ domain }}.conf
+  notify: restart apache

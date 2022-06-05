@@ -1,0 +1,16 @@
+---
+#System Settings
+#php_modules: [ 'php-curl', 'php-gd', 'php-mbstring', 'php-xml', 'php-xmlrpc', 'php-soap', 'php-intl', 'php-zip' ]
+
+#MySQL Settings
+db_ip : "dbprueba.cfsjy7ys8tan.eu-west-2.rds.amazonaws.com"
+mysql_root : "admin"
+mysql_root_password: "1qaz.WSX"
+mysql_db: "wordpress_db"
+mysql_new_user: "wordpress_user"
+mysql_new_password: "wordpress_user"
+
+#HTTP Settings
+http_host: "wordpress"
+http_conf: "wordpress.conf"
+http_port: "80"
