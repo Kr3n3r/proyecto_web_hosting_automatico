@@ -49,13 +49,6 @@ def logout(request):
     except:
         return redirect('login')
     return redirect('login')
-
-# def not_found(request):
-#     context = {
-        
-#     }
-#     return render(request, 'dashboard/404.html', context)
-
 def add_new_server(request):
     try:
         username = request.session['user']
@@ -78,23 +71,114 @@ class div_invalidfeedback(ErrorList):
                 return '<div class="invalid-feedback">%s</div>' % ''.join(['%s' % e for e in self])
             return ''
 
+def generate_random_password():
+    import string
+    import random
+    alphabets = list(string.ascii_letters)
+    digits = list(string.digits)
+    special_characters = list("!@#$%^&*()")
+    alphabets_count = 2
+    digits_count = 2
+    special_characters_count = 4
+    password = []
+    for i in range(alphabets_count):
+        password.append(random.choice(alphabets))
+    for i in range(digits_count):
+        password.append(random.choice(digits))
+    for i in range(special_characters_count):
+        password.append(random.choice(special_characters))
+    random.shuffle(password)
+    return "".join(password)
+
 def añadir_nuevo_servidor(request):
     if request.method == 'POST' :
         form = formulario_añadir_nuevo_servidor(data=request.POST, error_class=div_invalidfeedback)
         form.validate()
         if form.is_valid() :
-            return render(request, 'dashboard/index.html', {})
-        else:
-            return render(request, 'dashboard/add_new_server.html', {'form' : form})
-    elif request.method == 'GET':
-        form = formulario_añadir_nuevo_servidor()
-    return render(request, 'dashboard/add_new_server.html', {'form' : form})
+            from django.template.loader import render_to_string
+            CMS = [(1,'Wordpress'),(2,'Prestashop'),(3,'Mediawiki'),]
+            
+            name = form['name']
+            web_name = form['web_name']
+            cms_type = CMS[form['cms_type'] - 1][1]
+            server_type = form['server_type']
+            logo = None
+            admin_user = form['admin_user']
+            admin_password = form['admin_password']
+            
+            public_ssh_key = ""
+            db_password = generate_random_password()
+            db_name = cms_type + "_db"
+            db_user = cms_type + "_user"
+            
+            rendered_text = render_to_string('dashboard/terraform_template', {
+                'sshkey' : public_ssh_key,
+                'name' : name,
+                'db_name' : db_name,
+                'db_password' : db_password,
+                'db_user' : db_user,
+                'db_instance_name' : name,
+                })
+            
+            # Terraform
+            terraform_binary = "/usr/bin/terraform"
+            terraform_dir = "/opt/terraform/"
+            terraform_file = "/opt/terraform/main.tf"
+            maintf = open(terraform_file, "w")
+            maintf.write(rendered_text)
+            maintf.close()
+            import os
+            os.chdir(terraform_dir)
+            import subprocess
+            subprocess.run([terraform_binary, "plan"])
+            subprocess.run([terraform_binary, "apply", "-auto-approve"])
+            cmd_dns = terraform_binary + f' state show aws_instance.{name} | grep public_dns | sed "s/ //g" | cut -d"=" -f2 | sed "s/^.//g" | sed "s/.$//g"'
+            cmd_ip = terraform_binary + f' state show aws_instance.{name} | grep public_ip | sed 1d | sed "s/ //g" | cut -d"=" -f2 | sed "s/^.//g" | sed "s/.$//g"'
+            cmd_db_ip = terraform_binary + f' state show aws_db_instance.{name} | grep endpoint | sed "s/ //g" | cut -d"=" -f2 | sed "s/^.//g" | sed "s/.$//g" | cut -d":" -f1 | cut -d"." -f 2,3,4,5,6'
 
-def añadir_nuevo_servidor_old(request):
-    if request.method == 'POST' :
-        form = formulario_añadir_nuevo_servidor(data=request.POST, error_class=div_invalidfeedback)
-        form.validate()
-        if form.is_valid() :
+            terraform_public_dns = subprocess.check_output(cmd_dns,shell=True)
+            terraform_public_ip = subprocess.check_output(cmd_ip,shell=True)
+            terraform_db_ip = subprocess.check_output(cmd_db_ip,shell=True)
+            
+            # Para instalar Ansible para autoinstalación
+            text_ansible_hosts='%s ansible_ssh_private_key_file=/opt/ansible/key\n'%(terraform_public_dns)
+            fichero = open('/etc/ansible/hosts','w')
+            fichero.write(text_ansible_hosts)
+            fichero.close()
+            
+            # Se cargan las variables en group_vars/all
+            db_new_password = generate_random_password()
+            db_new_user = db_user + "_new"
+            rendered_text = render_to_string('dashboard/all', {
+                'domain' : terraform_public_dns,
+                'db_ip' : terraform_db_ip,
+                'mysql_db' : db_name,
+                'mysq_user' : db_user,
+                'mysql_new_user' : db_new_user,
+                'mysql_password' : db_new_password,
+                'site_name' : web_name,
+                'admin_user' : admin_user,
+                'admin_password' : admin_password,
+                'name_user' : 'admin',
+                'surname_user' : 'administrator',
+                'server' : name,
+                'cms' : cms_type.lower()
+                })
+            fichero = open('/etc/ansible/group_vars/all','w')
+            fichero.write(rendered_text)
+            fichero.close()
+            
+            # Ejecutamos playbook de Ansible para instalar el cms correspondiente
+            subprocess.run(["/usr/bin/ansible-playbook", "/opt/ansible/autoinstall.yml"]) # Instalará los ansible_playbooks y además los ejecutará pasandole las variables
+
+            Servidor(user_admin=request.session["user"], 
+                     name=terraform_public_dns,
+                     cms_type=cms_type, 
+                     server_type=server_type, 
+                     public_ip=terraform_public_ip,
+                     admin_user=admin_user,
+                     admin_password=admin_password)
+            
             return render(request, 'dashboard/index.html', {})
         else:
             return render(request, 'dashboard/add_new_server_not.html', {'form' : form})

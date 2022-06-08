@@ -40,7 +40,6 @@ class Servidor(models.Model):
     cms_type = models.CharField(choices=CMS, max_length=255)
     server_type = models.CharField(choices=SERVER_TYPES, max_length=255)
     public_ip = models.GenericIPAddressField(protocol='IPv4')
-    cpanel_password = models.CharField(max_length=20)
 
     def server_count(self, *args, **kwargs):
         count = Servidor.objects.filter(user_admin=self.user_admin)
