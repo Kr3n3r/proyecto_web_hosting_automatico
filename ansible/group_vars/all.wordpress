@@ -1,16 +1,26 @@
 ---
-#System Settings
-#php_modules: [ 'php-curl', 'php-gd', 'php-mbstring', 'php-xml', 'php-xmlrpc', 'php-soap', 'php-intl', 'php-zip' ]
 
-#MySQL Settings
+domain: ec2-18-132-40-0.eu-west-2.compute.amazonaws.com
+
 db_ip : "dbprueba.cfsjy7ys8tan.eu-west-2.rds.amazonaws.com"
+mysql_db: "wordpress_db"
+mysql_user: "admin"
+mysql_password: "1qaz.WSX"
+mysql_new_user : "wordpress_user"
+mysql_new_password : "wordpress_user"
+
+site_name: "Mi nuevo wordpress"
+admin_user: "admin"
+admin_password: "admin"
+name_user: "alejandro"
+surname_user: "marmol"
+
+server: "Prueba"
+
 mysql_root : "admin"
 mysql_root_password: "1qaz.WSX"
-mysql_db: "wordpress_db"
-mysql_new_user: "wordpress_user"
-mysql_new_password: "wordpress_user"
-
-#HTTP Settings
-http_host: "wordpress"
-http_conf: "wordpress.conf"
+http_host: ec2-18-132-40-0.eu-west-2.compute.amazonaws.com
+http_conf: ec2-18-132-40-0.eu-west-2.compute.amazonaws.com.conf
 http_port: "80"
+
+cms : "wordpress"

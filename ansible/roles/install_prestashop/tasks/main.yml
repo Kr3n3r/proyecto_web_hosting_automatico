@@ -20,14 +20,14 @@
 - name: Instalacion con script php
   command: >
     php /var/www/html/{{ domain }}/install/index_cli.php 
-    --domain=www.{{ domain }}.com 
+    --domain={{ domain }}
     --db_server={{ db_ip }} 
     --db_name={{ mysql_db }} 
     --db_user={{ mysql_new_user }} 
     --db_password={{ mysql_new_password }} 
     --theme=classic 
     --language=es 
-    --email={{ name_user }}@{{ domain }}.com 
+    --email={{ name_user }}@{{ domain }}
     --first-name={{ name_user }} 
     --second-name={{ surname_user }}
     --timezone=Europe/Madrid

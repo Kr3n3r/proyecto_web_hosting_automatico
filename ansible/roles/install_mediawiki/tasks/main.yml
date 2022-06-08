@@ -20,13 +20,13 @@
   command: >
     php /var/www/html/{{ domain }}/maintenance/install.php 
     --dbname={{ mysql_db }} 
-    --dbserver={{ db_ip}} 
+    --dbserver={{ db_ip }} 
     --installdbuser={{ mysql_new_user }} 
     --installdbpass={{ mysql_new_password }} 
     --dbuser={{ mysql_new_user }} 
     --dbpass={{ mysql_new_password }} 
     --dbprefix="md_" 
-    --server="http://www.{{ domain }}.com" 
+    --server="http://{{ domain }}" 
     --lang=es 
     --scriptpath="" 
     --pass={{ admin_password }} "{{ site_name }}" "{{ admin_user }}"
