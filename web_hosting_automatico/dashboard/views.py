@@ -98,15 +98,16 @@ def añadir_nuevo_servidor(request):
             from django.template.loader import render_to_string
             CMS = [(1,'Wordpress'),(2,'Prestashop'),(3,'Mediawiki'),]
             
-            name = form['name']
-            web_name = form['web_name']
-            cms_type = CMS[form['cms_type'] - 1][1]
-            server_type = form['server_type']
+            name = form.cleaned_data['name'].replace('.','_')
+            web_name = form.cleaned_data['web_name']
+            #cms_type = CMS[form.cleaned_data['cms_type'] - 1][1]
+            cms_type="wordpress"
+            server_type = form.cleaned_data['server_type']
             logo = None
-            admin_user = form['admin_user']
-            admin_password = form['admin_password']
+            admin_user = form.cleaned_data['admin_user']
+            admin_password = form.cleaned_data['admin_password']
             
-            public_ssh_key = ""
+            public_ssh_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDNuLxF9S7kZlmgygPGGc4UvujUgtXtIs0coCAgvKhRyBGfnzogjtx1Vj93Sya7Fkue8FUuKZhzOZZX/Uo+jcMbGXT8XdOn3zALEjQt37TbOop/AaMd37dWAxatEDUsbs8SQUTUwG9lODct24B+j8xHtD7gQRWEhC/EmsP6c8HnwT8Sr7icXN3XG3p8oAMF+aNDI1y2dJowKPOv5iYpQDNsB8eHWJt8pm+eLA0OtCt0CD2v2noUov+78v0ULbihtRjV/X4ShEzMMhXL2d53ZVVzoErBPus/B4lbCHURoWK4UHRYbMajIcZsFiFjgA3gXmBPIM1euMKQZMZZ3m2fLl2ziGXwWX+ZAMcKK6nm/7i2V493YmsC7bXYOtqiClC0cH8JQ5nHmCbTgy48/MG1oxITWIqEhP5av+jeohBnqvd5XEGlwrmgjfNo02FkhIesFjdPeyMRlebuyOYyXAqDunDrmNpzwktpZMf4TejrISU6GHN4hiqZ/NaH7vKlteCp5xs="
             db_password = generate_random_password()
             db_name = cms_type + "_db"
             db_user = cms_type + "_user"
@@ -137,11 +138,12 @@ def añadir_nuevo_servidor(request):
             cmd_db_ip = terraform_binary + f' state show aws_db_instance.{name} | grep endpoint | sed "s/ //g" | cut -d"=" -f2 | sed "s/^.//g" | sed "s/.$//g" | cut -d":" -f1 | cut -d"." -f 2,3,4,5,6'
 
             terraform_public_dns = subprocess.check_output(cmd_dns,shell=True)
+            terraform_public_dns = terraform_public_dns.replace("'","")
             terraform_public_ip = subprocess.check_output(cmd_ip,shell=True)
             terraform_db_ip = subprocess.check_output(cmd_db_ip,shell=True)
             
             # Para instalar Ansible para autoinstalación
-            text_ansible_hosts='%s ansible_ssh_private_key_file=/opt/ansible/key\n'%(terraform_public_dns)
+            text_ansible_hosts=f'{terraform_public_dns} ansible_ssh_private_key_file=/opt/ansible/key'
             fichero = open('/etc/ansible/hosts','w')
             fichero.write(text_ansible_hosts)
             fichero.close()
@@ -164,20 +166,20 @@ def añadir_nuevo_servidor(request):
                 'server' : name,
                 'cms' : cms_type.lower()
                 })
-            fichero = open('/etc/ansible/group_vars/all','w')
+            fichero = open('/opt/ansible/group_vars/all','w')
             fichero.write(rendered_text)
             fichero.close()
             
-            # Ejecutamos playbook de Ansible para instalar el cms correspondiente
+            #Ejecutamos playbook de Ansible para instalar el cms correspondiente
             subprocess.run(["/usr/bin/ansible-playbook", "/opt/ansible/autoinstall.yml"]) # Instalará los ansible_playbooks y además los ejecutará pasandole las variables
 
-            Servidor(user_admin=request.session["user"], 
-                     name=terraform_public_dns,
-                     cms_type=cms_type, 
-                     server_type=server_type, 
-                     public_ip=terraform_public_ip,
-                     admin_user=admin_user,
-                     admin_password=admin_password)
+            # Servidor(user_admin=request.session["user"], 
+            #          name=terraform_public_dns,
+            #          cms_type=cms_type, 
+            #          server_type=server_type, 
+            #          public_ip=terraform_public_ip,
+            #          admin_user=admin_user,
+            #          admin_password=admin_password)
             
             return render(request, 'dashboard/index.html', {})
         else:
