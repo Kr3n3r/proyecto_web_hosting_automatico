@@ -2,7 +2,7 @@
 - name: Install package dependencies.
   package: name={{ item }} state=present
   with_items:
-    - python
+    - python3
     - unzip
 
 - name: Download the awscli bundle.
@@ -15,7 +15,7 @@
   register: aws_cli_unarchive_installer
 
 - name: Install awscli package.
-  shell: python /tmp/awscli-bundle/install -i /usr/local/aws -b /usr/bin/aws
+  shell: python3 /tmp/awscli-bundle/install -i /usr/local/aws -b /usr/bin/aws
   args:
     creates: /usr/bin/aws
   when: aws_cli_unarchive_installer.changed
