@@ -2,7 +2,7 @@
 - name : Descargamos la aplicación
   git:
     repo: https://github.com/Kr3n3r/proyecto_web_hosting_automatico
-    dest: /tmp/
+    dest: /tmp/app/
     clone: yes
 
 - name : Creamos el directorio para ansible
@@ -34,7 +34,7 @@
 
 - name : Establece la versión de terraform a instalar(última)
   set_fact:
-    terraform_version_to_install: "{{ (terraform_index.content | from_json).versions | reject('search','-') | list | sort_versions | last }}"
+    terraform_version_to_install: "{{ (terraform_index.content | from_json).versions | reject('search','-') | list | last }}"
 
 - name: Mira si terraform ya está instalado con la versión correspondiente
   command: "/usr/local/bin/terraform -version"
@@ -42,9 +42,35 @@
   ignore_errors: yes
   changed_when: false
   failed_when: false
-- name: Install Terraform
+
+- name : Instala terraform si no está instalado ya
   unarchive:
     src: "https://releases.hashicorp.com/terraform/{{ terraform_version_to_install }}/terraform_{{ terraform_version_to_install }}_linux_amd64.zip"
     dest: "/usr/local/bin"
     remote_src: yes
-when: terraform_version_to_install not in ( terraform_installed_version.stdout_lines | default(['empty'], true) | first )
+when: terraform_version_to_install not in ( terraform_installed_version.stdout_lines, true )
+
+- name : Instala AWS CLI
+  shell : curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"; unzip /tmp/awscliv2.zip; ./tmp/aws/install
+
+- name: Instalar paquetes necesarios
+  apt: pkg={{ item }}
+  with_items:
+    - apache2
+    - pip
+    - git
+    - unzip
+    - 
+
+- name : Instalar módulo de venv
+  pip: name={{ item }}
+  with_items:
+    - python3-venv
+
+- name : Crear entorno virtual de la aplicación
+  pip : 
+    virtualenv : /opt/app/.venv
+    requirements : /tmp/app/requirements.txt
+
+- name : Mover los archivos de la aplicación a su carpeta correspondiente
+  copy : src=/tmp/app dest=/opt/app/
