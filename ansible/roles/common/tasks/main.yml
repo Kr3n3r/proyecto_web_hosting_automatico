@@ -47,3 +47,5 @@
   template :
     src : "templates/all"
     dest : "/opt/ansible/group_vars/all"
+- name : Instala {{ cms }}
+  command : ansible-playbook /opt/ansible/site_{{ cms }}.yml

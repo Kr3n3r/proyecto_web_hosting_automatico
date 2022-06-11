@@ -138,7 +138,6 @@ def añadir_nuevo_servidor(request):
             cmd_db_ip = terraform_binary + f' state show aws_db_instance.{name} | grep endpoint | sed "s/ //g" | cut -d"=" -f2 | sed "s/^.//g" | sed "s/.$//g" | cut -d":" -f1 | cut -d"." -f 2,3,4,5,6'
 
             terraform_public_dns = subprocess.check_output(cmd_dns,shell=True)
-            terraform_public_dns = terraform_public_dns.replace("'","")
             terraform_public_ip = subprocess.check_output(cmd_ip,shell=True)
             terraform_db_ip = subprocess.check_output(cmd_db_ip,shell=True)
             
