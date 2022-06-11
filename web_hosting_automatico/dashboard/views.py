@@ -100,8 +100,7 @@ def añadir_nuevo_servidor(request):
             
             name = form.cleaned_data['name'].replace('.','_')
             web_name = form.cleaned_data['web_name']
-            #cms_type = CMS[form.cleaned_data['cms_type'] - 1][1]
-            cms_type="wordpress"
+            cms_type = CMS[int(form.cleaned_data['cms_type']) - 1][1]
             server_type = form.cleaned_data['server_type']
             logo = None
             admin_user = form.cleaned_data['admin_user']
@@ -109,8 +108,8 @@ def añadir_nuevo_servidor(request):
             
             public_ssh_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDNuLxF9S7kZlmgygPGGc4UvujUgtXtIs0coCAgvKhRyBGfnzogjtx1Vj93Sya7Fkue8FUuKZhzOZZX/Uo+jcMbGXT8XdOn3zALEjQt37TbOop/AaMd37dWAxatEDUsbs8SQUTUwG9lODct24B+j8xHtD7gQRWEhC/EmsP6c8HnwT8Sr7icXN3XG3p8oAMF+aNDI1y2dJowKPOv5iYpQDNsB8eHWJt8pm+eLA0OtCt0CD2v2noUov+78v0ULbihtRjV/X4ShEzMMhXL2d53ZVVzoErBPus/B4lbCHURoWK4UHRYbMajIcZsFiFjgA3gXmBPIM1euMKQZMZZ3m2fLl2ziGXwWX+ZAMcKK6nm/7i2V493YmsC7bXYOtqiClC0cH8JQ5nHmCbTgy48/MG1oxITWIqEhP5av+jeohBnqvd5XEGlwrmgjfNo02FkhIesFjdPeyMRlebuyOYyXAqDunDrmNpzwktpZMf4TejrISU6GHN4hiqZ/NaH7vKlteCp5xs="
             db_password = generate_random_password()
-            db_name = cms_type + "_db"
-            db_user = cms_type + "_user"
+            db_name = cms_type.lower() + "_db"
+            db_user = cms_type.lower() + "_user"
             
             rendered_text = render_to_string('dashboard/terraform_template', {
                 'sshkey' : public_ssh_key,
@@ -125,7 +124,7 @@ def añadir_nuevo_servidor(request):
             terraform_binary = "/usr/bin/terraform"
             terraform_dir = "/opt/terraform/"
             terraform_file = "/opt/terraform/main.tf"
-            maintf = open(terraform_file, "w")
+            maintf = open(terraform_file, "a")
             maintf.write(rendered_text)
             maintf.close()
             import os
@@ -135,29 +134,33 @@ def añadir_nuevo_servidor(request):
             subprocess.run([terraform_binary, "apply", "-auto-approve"])
             cmd_dns = terraform_binary + f' state show aws_instance.{name} | grep public_dns | sed "s/ //g" | cut -d"=" -f2 | sed "s/^.//g" | sed "s/.$//g"'
             cmd_ip = terraform_binary + f' state show aws_instance.{name} | grep public_ip | sed 1d | sed "s/ //g" | cut -d"=" -f2 | sed "s/^.//g" | sed "s/.$//g"'
-            cmd_db_ip = terraform_binary + f' state show aws_db_instance.{name} | grep endpoint | sed "s/ //g" | cut -d"=" -f2 | sed "s/^.//g" | sed "s/.$//g" | cut -d":" -f1 | cut -d"." -f 2,3,4,5,6'
+            cmd_db_ip = terraform_binary + f' state show aws_db_instance.{name} | grep endpoint | sed "s/ //g" | cut -d"=" -f2 | sed "s/^.//g" | sed "s/.$//g" | cut -d":" -f1'
 
             terraform_public_dns = subprocess.check_output(cmd_dns,shell=True)
-            terraform_public_dns = terraform_public_dns.replace("'","")
+            terraform_public_dns = str(terraform_public_dns)[2:-3]
             terraform_public_ip = subprocess.check_output(cmd_ip,shell=True)
+            terraform_public_ip = str(terraform_public_ip)[2:-3]
             terraform_db_ip = subprocess.check_output(cmd_db_ip,shell=True)
+            terraform_db_ip = str(terraform_db_ip)[2:-3]
             
             # Para instalar Ansible para autoinstalación
-            text_ansible_hosts=f'{terraform_public_dns} ansible_ssh_private_key_file=/opt/ansible/key'
+            text_ansible_hosts='ubuntu@'+terraform_public_dns+' ansible_ssh_private_key_file=/opt/ansible/key'
             fichero = open('/etc/ansible/hosts','w')
             fichero.write(text_ansible_hosts)
             fichero.close()
             
             # Se cargan las variables en group_vars/all
             db_new_password = generate_random_password()
+            db_new_password = "mediawiki_user_new"
             db_new_user = db_user + "_new"
             rendered_text = render_to_string('dashboard/all', {
                 'domain' : terraform_public_dns,
                 'db_ip' : terraform_db_ip,
                 'mysql_db' : db_name,
-                'mysq_user' : db_user,
+                'mysql_user' : db_user,
+                'mysql_password' : db_password,
                 'mysql_new_user' : db_new_user,
-                'mysql_password' : db_new_password,
+                'mysql_new_password' : db_new_password,
                 'site_name' : web_name,
                 'admin_user' : admin_user,
                 'admin_password' : admin_password,
