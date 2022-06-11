@@ -1,0 +1,50 @@
+---
+- name : Descargamos la aplicación
+  git:
+    repo: https://github.com/Kr3n3r/proyecto_web_hosting_automatico
+    dest: /tmp/
+    clone: yes
+
+- name : Creamos el directorio para ansible
+  file :
+    path: /opt/ansible
+    state: directory
+
+- name : Creamos el directorio para terraform
+  file :
+    path: /opt/terraform
+    state: directory
+
+- name : Creamos el par de claves ssh
+  openssh_keypair :
+    path : "/opt/terraform/key"
+    type : rsa
+    size : 4096
+    state : present
+    force : no
+
+## habrá que ver quién es el usuario que va a tener permisos sobre esos archivos, porque tendrá que ser el mismo que ejecute el proceso de la aplicación.
+
+- name: Encuentra la versión más actualizada de terraform
+  uri:
+    url: https://releases.hashicorp.com/terraform/index.json
+    return_content: yes
+  register: terraform_index
+  check_mode: no
+
+- name : Establece la versión de terraform a instalar(última)
+  set_fact:
+    terraform_version_to_install: "{{ (terraform_index.content | from_json).versions | reject('search','-') | list | sort_versions | last }}"
+
+- name: Mira si terraform ya está instalado con la versión correspondiente
+  command: "/usr/local/bin/terraform -version"
+  register: terraform_installed_version
+  ignore_errors: yes
+  changed_when: false
+  failed_when: false
+- name: Install Terraform
+  unarchive:
+    src: "https://releases.hashicorp.com/terraform/{{ terraform_version_to_install }}/terraform_{{ terraform_version_to_install }}_linux_amd64.zip"
+    dest: "/usr/local/bin"
+    remote_src: yes
+when: terraform_version_to_install not in ( terraform_installed_version.stdout_lines | default(['empty'], true) | first )

@@ -1,5 +1,5 @@
 ---
-- name: Instalación del Panel de Control
+- name: Instalación de {{ cms }} en {{ server }}
   hosts: all
   become: yes
 
