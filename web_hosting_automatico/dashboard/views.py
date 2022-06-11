@@ -1,31 +1,21 @@
-from multiprocessing import context
 from django.shortcuts import redirect, render
 import django.contrib.auth
 from re import *
 
 # Create your views here.
-from django.http import Http404, HttpResponse
-from django.template import loader
 from .models import Servidor, Usuario
 
 app_name='dashboard'
 
-# def index(request):
-#     return HttpResponse(f"Hello, world. You're at the {app_name} index.")
-
 def index(request):
-    # username = recibido por POST o por -->session<--
     try:
         username = request.session['user']
     except:
         return redirect('login')
-    os = request.META['HTTP_USER_AGENT']
-    os = search(r'[w,W][i,I][n,N][d,D][o,O][w,W][s,S]',os.lower())
-    server_list = Servidor.objects.filter(user_admin=username)
+    server_list = Servidor.objects.filter(user_admin_id=username)
     return render(request, 'dashboard/index.html', {
         'user_name' : request.session['user'],
         'server_list' : server_list,
-        'os' : os,
     })
 
 def delete_item(request,id):
@@ -45,21 +35,9 @@ def logout(request):
     try:
         django.contrib.auth.logout(request)
         request.session.modified = True
-        ## así se hace, cambiar
     except:
         return redirect('login')
     return redirect('login')
-def add_new_server(request):
-    try:
-        username = request.session['user']
-    except:
-        redirect('login')
-    context = {
-        'cms_type' : Servidor.CMS,
-        'server_type' : Servidor.SERVER_TYPES,
-        
-    }
-    return render(request, 'dashboard/add_new_server.html', context)
 
 from .forms import formulario_añadir_nuevo_servidor
 from django.forms.utils import ErrorList
@@ -175,13 +153,14 @@ def añadir_nuevo_servidor(request):
             #Ejecutamos playbook de Ansible para instalar el cms correspondiente
             subprocess.run(["/usr/bin/ansible-playbook", "/opt/ansible/autoinstall.yml"]) # Instalará los ansible_playbooks y además los ejecutará pasandole las variables
 
-            # Servidor(user_admin=request.session["user"], 
-            #          name=terraform_public_dns,
-            #          cms_type=cms_type, 
-            #          server_type=server_type, 
-            #          public_ip=terraform_public_ip,
-            #          admin_user=admin_user,
-            #          admin_password=admin_password)
+            new_server = Servidor.objects.create(
+                id=name,
+                name=terraform_public_dns,
+                cms_type=cms_type, 
+                server_type=server_type, 
+                public_ip=terraform_public_ip,
+                user_admin_id=request.session["user"], 
+                )
             
             return render(request, 'dashboard/index.html', {})
         else:

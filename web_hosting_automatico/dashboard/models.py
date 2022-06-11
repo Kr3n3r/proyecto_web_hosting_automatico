@@ -9,13 +9,12 @@ from localflavor.es.models import ESIdentityCardNumberField
 #   nombre, apellidos, DNI, 
 #   email, username, password
 class Usuario(models.Model):
+    username = models.CharField(primary_key=True, max_length=255)
+    password = models.CharField(max_length=20) 
     name = models.CharField(max_length=64)
     surname = models.CharField(max_length=130)
     DNI = ESIdentityCardNumberField()
     email = models.EmailField(max_length=130)
-    username = models.CharField(primary_key=True, max_length=255)
-    password = models.CharField(max_length=20) 
-    # hay que asegurar que la contraseña se encripta con algún tipo de hash en el formulario de registro
     
     def __str__(self):
         return self.username
@@ -35,12 +34,13 @@ class Servidor(models.Model):
         (3,'Premium'),
     ]
     
-    user_admin = models.ForeignKey(to='Usuario', on_delete=models.CASCADE, default='anybody')
+    id = models.CharField(primary_key=True, max_length=255)
     name = models.CharField(max_length=255)
     cms_type = models.CharField(choices=CMS, max_length=255)
     server_type = models.CharField(choices=SERVER_TYPES, max_length=255)
     public_ip = models.GenericIPAddressField(protocol='IPv4')
+    user_admin_id = models.ForeignKey(to='Usuario', on_delete=models.CASCADE, default='anybody')
 
     def server_count(self, *args, **kwargs):
-        count = Servidor.objects.filter(user_admin=self.user_admin)
+        count = Servidor.objects.filter(user_admin_id=self.user_admin)
         return count
