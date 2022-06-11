@@ -82,6 +82,7 @@ def añadir_nuevo_servidor(request):
             logo = None
             admin_user = form.cleaned_data['admin_user']
             admin_password = form.cleaned_data['admin_password']
+            Admin = Usuario.objects.get(username=request.session['user'])
             
             public_ssh_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDNuLxF9S7kZlmgygPGGc4UvujUgtXtIs0coCAgvKhRyBGfnzogjtx1Vj93Sya7Fkue8FUuKZhzOZZX/Uo+jcMbGXT8XdOn3zALEjQt37TbOop/AaMd37dWAxatEDUsbs8SQUTUwG9lODct24B+j8xHtD7gQRWEhC/EmsP6c8HnwT8Sr7icXN3XG3p8oAMF+aNDI1y2dJowKPOv5iYpQDNsB8eHWJt8pm+eLA0OtCt0CD2v2noUov+78v0ULbihtRjV/X4ShEzMMhXL2d53ZVVzoErBPus/B4lbCHURoWK4UHRYbMajIcZsFiFjgA3gXmBPIM1euMKQZMZZ3m2fLl2ziGXwWX+ZAMcKK6nm/7i2V493YmsC7bXYOtqiClC0cH8JQ5nHmCbTgy48/MG1oxITWIqEhP5av+jeohBnqvd5XEGlwrmgjfNo02FkhIesFjdPeyMRlebuyOYyXAqDunDrmNpzwktpZMf4TejrISU6GHN4hiqZ/NaH7vKlteCp5xs="
             db_password = generate_random_password()
@@ -159,7 +160,7 @@ def añadir_nuevo_servidor(request):
                 cms_type=cms_type, 
                 server_type=server_type, 
                 public_ip=terraform_public_ip,
-                user_admin_id=request.session["user"], 
+                user_admin_id=Admin, 
                 )
             
             return render(request, 'dashboard/index.html', {})
