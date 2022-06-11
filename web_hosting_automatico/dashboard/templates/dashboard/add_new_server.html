@@ -1,68 +1,84 @@
 {% load static %}
-{% comment %} {% load bootstrap5 %} {% endcomment %}
-<!-- Este documento no es responsive https://codepen.io/samnorton/pen/oNYajYM .
+{% load bootstrap5 %}
+<!-- Este documento no es responsive https://codepen.io/samnorton/pen/oNYajYM . 
      Para responsivos : https://freefrontend.com/bootstrap-forms/-->
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>New server</title>
-        <!-- CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link href="{% static 'dashboard/add_new_server.css' %}" rel="stylesheet" type="text/css">
-        {# CSS Bootstrap #}
-        {% comment %} {% bootstrap_css %} {% endcomment %}
-        <!-- JS -->
-        {% comment %} <script src="{% static 'dashboard/add_new_server.js' %}" defer></script> {% endcomment %}
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        {% comment %} {% bootstrap_javascript %} {% endcomment %}
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New server</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="{% static 'dashboard/add_new_server_not.css' %}" rel="stylesheet" type="text/css">
+    {# CSS Bootstrap #}
+	{% comment %} {% bootstrap_css %} {% endcomment %}
+    <!-- JS -->
+    <script src="{% static 'dashboard/add_new_server.js' %}" defer></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    {% comment %} {% bootstrap_javascript %} {% endcomment %}
 
-        <!-- favicon -->
-        <link rel="shortcut icon" href="{% static 'dashboard/favicon.ico' %}" type="image/x-icon">
+    <!-- favicon -->
+    <link rel="shortcut icon" href="{% static 'dashboard/favicon.ico' %}" type="image/x-icon">
 
-    </head>
-    <body>
-        <div class="container-md">
-            <div class="row">
-                <div class="form-holder">
-                    <div class="form-content">
-                        <div class="row">
-                            <h3>Formulario de registro de nuevo sitio</h3>
-                        </div>
-                        <div class="row">
-                            <p>Rellena los siguientes campos.</p>
-                        
-                            <form class="requires-validation" action='.' method='POST'>
-                                {% csrf_token %}
-                                {% for field in form %}
-                                    <div class="form-group">
-                                    <p{% with classes=field.css_classes %}{% if classes %} class="{{ classes }}"{% endif %}{% endwith %}>
-                                        {% if field.label %}{{ field.label_tag }}{% endif %}
-                                        {{ field }}
-                                        {% if field.help_text %}
-                                        <span class="helptext">{{ field.help_text|safe }}</span>
-                                        {% endif %}
-                                        {% if field.html_name in form.errors %}
-                                            {% for error in field.errors %}
-                                                <div class="invalid-feedback">{{ error }}</div><!-- CONSEGUIDO! -->
-                                            {% endfor %}
-                                        {% endif %}
-                                        {% if forloop.last %}
-                                        {% for field in hidden_fields %}{{ field }}{% endfor %}
-                                        {% endif %}
-                                    </p>
-                                    </div>
-                                {% endfor %}
-                            </form>
-                        </div>
+</head>
+<body>
+    <div class="form-body">
+        <div class="row">
+            <div class="form-holder">
+                <div class="form-content">
+                    <div class="form-items">
+                        <h3>Formulario de registro de nuevo sitio</h3>
+                        <p>Rellena los siguientes campos.</p>
+                        <form class="requires-validation" action='.' method='POST'>
+                            {% csrf_token %}
+                            {% comment %} {{ form.as_p }} {% endcomment %} <!-- Se aplica plantilla por defecto --> 
+                            {% for field in form %}
+                                <p{% with classes=field.css_classes %}{% if classes %} class="{{ classes }}"{% endif %}{% endwith %}>
+                                    {% if field.label %}{{ field.label_tag }}{% endif %}
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                    <span class="helptext">{{ field.help_text|safe }}</span>
+                                    {% endif %}
+                                    {% if field.html_name in form.errors %}
+                                        {% for error in field.errors %}
+                                            <div class="invalid-feedback">{{ error }}</div>
+                                        {% endfor %}
+                                    {% endif %}
+                                    {% if forloop.last %}
+                                    {% for field in hidden_fields %}{{ field }}{% endfor %}
+                                    {% endif %}
+                                </p>
+                            {% endfor %}
+                            {% comment %} {% for field in form.fields %}
+                            {% if field.choices %}
+                                <div class="col-md-12">
+                                    <select class="form-select mt-3" required>
+                                        <option selected disabled hidden value="">Tipo de Servidor</option>
+                                        {% for type in server_type %}
+                                            <option value="{{ type.1 }}">{{ type.1 }}</option>
+                                        {% endfor %}
+                                </select>
+                                    <div class="valid-feedback">You selected a position!</div>
+                                    <div class="invalid-feedback">Please select a position!</div>
+                                </div>
+                            {% endif %}
+                            {% endfor %}
+                            {% for error in form.errors %}
+                            <p style='color : #FFF'>Error en el campo : {{ error }}</p>
+                            {% endfor %} {% endcomment %}
+                            <div class="form-button mt-3">
+                                <button id="submit" type="submit" class="btn btn-primary">Register</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-    </body>
+    </div>
+</body>
 </html>
 

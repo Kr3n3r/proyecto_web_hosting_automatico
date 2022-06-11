@@ -165,7 +165,7 @@ def añadir_nuevo_servidor(request):
             
             return render(request, 'dashboard/index.html', {})
         else:
-            return render(request, 'dashboard/add_new_server_not.html', {'form' : form})
+            return render(request, 'dashboard/add_new_server.html', {'form' : form})
     elif request.method == 'GET':
         form = formulario_añadir_nuevo_servidor()
-    return render(request, 'dashboard/add_new_server_not.html', {'form' : form})
+    return render(request, 'dashboard/add_new_server.html', {'form' : form})
