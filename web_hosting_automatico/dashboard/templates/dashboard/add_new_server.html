@@ -48,7 +48,7 @@
                                         {% endif %}
                                         {% if field.html_name in form.errors %}
                                             {% for error in field.errors %}
-                                                <div class="invalid-feedback">{{ error }}</div><!-- CONSEGUIDO! -->
+                                                <div class="invalid-feedback">{{ error }}</div>
                                             {% endfor %}
                                         {% endif %}
                                         {% if forloop.last %}
