@@ -72,13 +72,12 @@ class div_invalidfeedback(ErrorList):
             return ''
 
 def generate_random_password():
-    import string
-    import random
+    import string, random
     alphabets = list(string.ascii_letters)
     digits = list(string.digits)
-    special_characters = list("!@#$%^&*()")
-    alphabets_count = 2
-    digits_count = 2
+    special_characters = list("!#$%^&*()")
+    alphabets_count = 4
+    digits_count = 4
     special_characters_count = 4
     password = []
     for i in range(alphabets_count):
