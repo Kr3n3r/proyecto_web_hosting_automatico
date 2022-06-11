@@ -48,7 +48,6 @@
     src: "https://releases.hashicorp.com/terraform/{{ terraform_version_to_install }}/terraform_{{ terraform_version_to_install }}_linux_amd64.zip"
     dest: "/usr/local/bin"
     remote_src: yes
-when: terraform_version_to_install not in ( terraform_installed_version.stdout_lines, true )
 
 - name : Instala AWS CLI
   shell : curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"; unzip /tmp/awscliv2.zip; ./tmp/aws/install
