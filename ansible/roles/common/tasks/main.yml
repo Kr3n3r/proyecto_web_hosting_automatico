@@ -23,13 +23,9 @@
   with_items:
     - apache2
     - pip
-    - redis-server
     - git
     - ansible
-    - python3-mysqldb
     - php7.4
-    - mariadb-server
-    - mariadb-client
     - unzip
     - apache2-utils
     - php7.4-dom
@@ -45,10 +41,6 @@
     - php7.4-cli
     - php7.4-apcu
     - php7.4-intl
-  become: yes
-  become_user: root
-- name : Instalar módulo de pip
-  pip: name=pymysql
   become: yes
   become_user: root
 - name: Clone a github repository
