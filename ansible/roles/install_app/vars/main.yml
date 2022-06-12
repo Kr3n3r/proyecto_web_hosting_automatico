@@ -1,0 +1,5 @@
+---
+
+app_user : "{{ app_user }}"
+app_user_pass : "{{ app_user_pass }}"
+app_group : "{{ app_group }}"

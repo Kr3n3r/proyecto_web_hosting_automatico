@@ -2,6 +2,7 @@
 - name: Instalación de la aplicación
   hosts: 127.0.0.1
   become: yes
-
+  vars_files:
+    - roles/install_app/vars/main.yml
   roles:
     - install_app

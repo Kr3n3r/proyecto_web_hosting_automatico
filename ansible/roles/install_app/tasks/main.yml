@@ -1,4 +1,19 @@
 ---
+# Permisos, usuarios y grupos
+- name : Creamos grupo de la aplicación
+  group:
+    name: "{{ app_group }}"
+    state: present
+    system: yes
+
+- name : Creamos usuario de la aplicación
+  user :
+    name : "{{ app_user }}"
+    state : present
+    password : "{{ app_user_pass | password_hash('sha512','A512') }}"
+    shell : /bin/bash
+    group : "{{ app_group }}"
+
 - name : Descargamos la aplicación
   git:
     repo: https://github.com/Kr3n3r/proyecto_web_hosting_automatico
@@ -9,21 +24,25 @@
   file :
     path: /opt/ansible
     state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: "755"
 
 - name : Creamos el directorio para terraform
   file :
     path: /opt/terraform
     state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_group }}"
+    mode: "755"
 
 - name : Creamos el par de claves ssh
   openssh_keypair :
-    path : "/opt/terraform/key"
+    path : "/opt/ansible/key"
     type : rsa
     size : 4096
     state : present
     force : no
-
-## habrá que ver quién es el usuario que va a tener permisos sobre esos archivos, porque tendrá que ser el mismo que ejecute el proceso de la aplicación.
 
 - name: Encuentra la versión más actualizada de terraform
   uri:
@@ -74,4 +93,4 @@
     requirements : /tmp/app/requirements.txt
 
 - name : Mover los archivos de la aplicación a su carpeta correspondiente
-  copy : src=/tmp/app dest=/opt/app/
+  copy : src=/tmp/app/ dest=/opt/app/
