@@ -3,5 +3,5 @@ from .models import Usuario, Servidor
 
 # Register your models here.
 
-# admin.site.register(Usuario)
-# admin.site.register(Servidor)
+admin.site.register(Usuario)
+admin.site.register(Servidor)

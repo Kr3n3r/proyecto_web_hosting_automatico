@@ -56,9 +56,11 @@
   apt: pkg={{ item }}
   with_items:
     - apache2
+    - apache2-dev
     - pip
     - git
     - unzip
+    - ansible
     - 
 
 - name : Instalar módulo de venv

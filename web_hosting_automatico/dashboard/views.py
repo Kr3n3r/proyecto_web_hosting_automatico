@@ -73,8 +73,8 @@ def añadir_nuevo_servidor(request):
         form.validate()
         if form.is_valid() :
             from django.template.loader import render_to_string
-            CMS = [(1,'Wordpress'),(2,'Prestashop'),(3,'Mediawiki'),]
-            SERVER_TYPES = [(1,'Standart'),(2,'Basic'),(3,'Premium'),]
+            CMS = [('Wordpress','Wordpress'),('Prestashop','Prestashop'),('Mediawiki','Mediawiki'),]
+            SERVER_TYPES = [('Standart','Standart'),('Basic','Basic'),('Premium','Premium'),]
             
             name = form.cleaned_data['name'].replace('.','_')
             web_name = form.cleaned_data['web_name']

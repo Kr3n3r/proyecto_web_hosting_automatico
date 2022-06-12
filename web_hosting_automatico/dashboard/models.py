@@ -24,14 +24,14 @@ class Usuario(models.Model):
 #   ip pública, password del panel
 class Servidor(models.Model):
     CMS = [
-        (1,'Wordpress'),
-        (2,'Prestashop'),
-        (3,'Mediawiki'),
+        ('Wordpress','Wordpress'),
+        ('Prestashop','Prestashop'),
+        ('Mediawiki','Mediawiki'),
     ]
     SERVER_TYPES = [
-        (1,'Standart'),
-        (2,'Basic'),
-        (3,'Premium'),
+        ('Standart','Standart'),
+        ('Basic','Basic'),
+        ('Premium','Premium'),
     ]
     
     id = models.CharField(primary_key=True, max_length=255)
