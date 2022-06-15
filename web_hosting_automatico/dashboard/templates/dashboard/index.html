@@ -21,7 +21,6 @@
                 <div class="p-4">
                     <!-- LOGO -->
                     <a class="flex items-center text-white space-x-4" href="">
-                        <!-- <svg class="w-7 h-7 bg-indigo-600 rounded-lg p-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg> -->
                         <img src="{% static 'dashboard/icono.png' %}" width="40" height="40">
                         <span class="text-2xl font-bold">Hosting Web</span>
                     </a>
@@ -74,7 +73,6 @@
                 <!-- PROFILE -->
                 <div class="text-gray-200 border-gray-800 rounded flex items-center justify-between p-2">
                     <div class="flex items-center space-x-2">
-                        <!-- AVATAR IMAGE BY FIRST LETTER OF NAME -->
                         <img src="https://ui-avatars.com/api/?name={{ user_name }}&size=128&background=random&color=fff" class="w-7 w-7 rounded-full" alt="Profile">
                         <h1>{{ user_name }}<h1>
                     </div>
@@ -111,7 +109,6 @@
                                 <h1 class="text-xl font-semibold">{{ server.id }}</h1>
                             </div>
                         </div>
-                        {% comment %} <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>                     {% endcomment %}
                         <img src="
                                 {% if server.cms_type == 'Prestashop' %}
                                     {% static 'dashboard/prestashop_icon.png' %}
@@ -201,12 +198,6 @@
                                             </a>
                                         </div>
                                         <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110 cursor-pointer cursor-pointer">
-                                            {% if os == 'windows' %}
-                                                <a href='cmd://cmd#ssh;alejandromarmol@localhost'>
-                                            {% else %}
-                                                {% comment %} <a href='bash://gnome-terminal#ssh;alejandromarmol@localhost'> {% endcomment %}
-                                                <a href='bash://mate-terminal#ssh;alejandromarmol@localhost'>
-                                            {% endif %}
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                             </svg>

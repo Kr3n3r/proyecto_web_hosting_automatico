@@ -1,23 +1,23 @@
 ---
-- name: Install package dependencies.
+- name: Instala dependencias
   package: name={{ item }} state=present
   with_items:
     - python3
     - unzip
     - python3-venv
 
-- name: Download the awscli bundle.
+- name: Descarga el paquete de AWS CLI
   get_url: url=https://s3.amazonaws.com/aws-cli/awscli-bundle.zip dest=/tmp/awscli-bundle.zip
 
-- name: Unarchive the installer.
+- name: Descomprime el paquete
   unarchive: src=/tmp/awscli-bundle.zip dest=/tmp copy=no creates=/tmp/awscli-bundle
 
-- name: Install awscli package.
+- name: Instala el paquete
   shell: python3 /tmp/awscli-bundle/install -i /usr/local/aws -b /usr/bin/aws
   args:
     creates: /usr/bin/aws
 
-- name: Configure AWS.
+- name: Configura AWS con las claves
   shell: aws configure set {{ item.key }} {{ item.value }} --profile {{ aws_profile }}
   no_log: False
   with_dict:

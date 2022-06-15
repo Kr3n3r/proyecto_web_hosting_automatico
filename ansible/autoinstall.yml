@@ -1,5 +1,5 @@
 ---
-- name: Instalación de {{ cms }} en {{ server }}
+- name: Instalación de aplicación en servidor
   hosts: all
   become: yes
 

@@ -165,7 +165,6 @@ def añadir_nuevo_servidor(request):
                 user_admin_id=Admin, 
                 )
             
-            #return render(request, 'dashboard/index.html', {})
             return redirect("index")
         else:
             return render(request, 'dashboard/add_new_server.html', {'form' : form})

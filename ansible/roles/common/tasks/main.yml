@@ -43,7 +43,7 @@
     - php7.4-intl
   become: yes
   become_user: root
-- name: Clone a github repository
+- name: Clonar el repositorio de github en la máquina
   git:
     repo: https://github.com/Kr3n3r/ansible_playbooks
     dest: /opt/ansible/
@@ -54,5 +54,5 @@
   template :
     src : "templates/all"
     dest : "/opt/ansible/group_vars/all"
-- name : Instala {{ cms }}
+- name : Instalar {{ cms }}
   command : ansible-playbook /opt/ansible/site_{{ cms }}.yml

@@ -22,7 +22,7 @@ app_name='login'
 def login(request):
     if request.method == 'POST' :
         user_email = request.POST.get('email')
-        user_password = request.POST.get('password')## asegurar inyecciones sql
+        user_password = request.POST.get('password')
         
         check_user = Usuario.objects.filter(email=user_email, password=user_password).get()
         

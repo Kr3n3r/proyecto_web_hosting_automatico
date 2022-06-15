@@ -1,11 +1,8 @@
-from threading import local
 from django import forms
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from .models import Servidor
 
 class formulario_añadir_nuevo_servidor(forms.Form):
-    # template_name_p='../../../../web_hosting_automatico/dashboard/static/dashboard/add_new_server_as_p.html' #<- no vale
-    # template_name="dashboard/add_new_server_as_p.html" <- problema con la ruta, ya se ha copiado y adaptado la template en el index.html
     name = forms.CharField(
         max_length=2048,
         min_length=10,
@@ -25,7 +22,7 @@ class formulario_añadir_nuevo_servidor(forms.Form):
         validators=[MaxLengthValidator(2048), MinLengthValidator(10)],
         localize=True,
         disabled=False,
-        label_suffix='', # se aplica a vacío para que no muestre el ':' como sufijo del label
+        label_suffix='',
     )
     web_name = forms.CharField(
         max_length=2048,
@@ -45,7 +42,7 @@ class formulario_añadir_nuevo_servidor(forms.Form):
         validators=[MaxLengthValidator(2048), MinLengthValidator(10)],
         localize=True,
         disabled=False,
-        label_suffix='', # se aplica a vacío para que no muestre el ':' como sufijo del label
+        label_suffix='', 
     )
     cms_type = forms.ChoiceField(
         choices=Servidor.CMS, 
@@ -73,7 +70,7 @@ class formulario_añadir_nuevo_servidor(forms.Form):
         help_text='',
         error_messages={
             'required' : 'Este campo es requerido',
-            'invalid_choice' : 'Jaja pillín, creías que podrías hackear este formulario'
+            'invalid_choice' : 'Esta es una opción no válida'
             }, 
         show_hidden_initial=None,
         validators=[],
