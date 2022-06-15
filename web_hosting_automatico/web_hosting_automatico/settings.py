@@ -25,7 +25,7 @@ SECRET_KEY = '+$tk!*g!ct0dg0lvp&et4&jz(z=-ynlo_mk*@88w##ea__70q2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['www.proyecto.com']
 
 
 # Application definition

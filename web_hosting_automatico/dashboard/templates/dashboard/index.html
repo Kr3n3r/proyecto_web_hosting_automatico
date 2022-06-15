@@ -108,7 +108,7 @@
                         <div class="space-y-2">
                             <p class="text-xs text-gray-400 uppercase">SITE {{ forloop.counter }}</p>
                             <div class="flex items-center space-x-2">
-                                <h1 class="text-xl font-semibold">{{ server.name }}</h1>
+                                <h1 class="text-xl font-semibold">{{ server.id }}</h1>
                             </div>
                         </div>
                         {% comment %} <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>                     {% endcomment %}
@@ -159,7 +159,7 @@
                             <tr class="border-b border-gray-200 bg-gray-{% cycle '300' '100'%}"><!-- elminado hover:bg-gray-100-->
                                 <!-- Nombre -->
                                 <td class="py-3 px-6 text-left whitespace-nowrap">
-                                        {{ server.name }}
+                                        {{ server.id }}
                                     </div>
                                 </td>
                                 <!-- Tipo -->

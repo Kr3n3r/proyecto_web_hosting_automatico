@@ -20,7 +20,7 @@ def index(request):
 
 def delete_item(request,id):
     server = Servidor.objects.get(id=id)
-    if server.user_admin_id == request.session['user'] :
+    if server.user_admin_id.pk == request.session['user'] :
         server.delete()
         return redirect('index')
     else:
@@ -68,6 +68,10 @@ def generate_random_password():
     return "".join(password)
 
 def añadir_nuevo_servidor(request):
+    try:
+        username = request.session['user']
+    except:
+        return redirect('login')
     if request.method == 'POST' :
         form = formulario_añadir_nuevo_servidor(data=request.POST, error_class=div_invalidfeedback)
         form.validate()
@@ -78,8 +82,8 @@ def añadir_nuevo_servidor(request):
             
             name = form.cleaned_data['name'].replace('.','_')
             web_name = form.cleaned_data['web_name']
-            cms_type = CMS[int(form.cleaned_data['cms_type']) - 1][1]
-            server_type = SERVER_TYPES[int(form.cleaned_data['server_type']) - 1][1]
+            cms_type = form.cleaned_data['cms_type']
+            server_type = form.cleaned_data['server_type']
             logo = None
             admin_user = form.cleaned_data['admin_user']
             admin_password = form.cleaned_data['admin_password']
@@ -98,7 +102,7 @@ def añadir_nuevo_servidor(request):
                 })
             
             # Terraform
-            terraform_binary = "/usr/bin/terraform"
+            terraform_binary = "/usr/local/bin/terraform"
             terraform_dir = "/opt/terraform/"
             terraform_file = "/opt/terraform/main.tf"
             maintf = open(terraform_file, "a")
@@ -128,7 +132,6 @@ def añadir_nuevo_servidor(request):
             
             # Se cargan las variables en group_vars/all
             db_new_password = generate_random_password()
-            db_new_password = "mediawiki_user_new"
             db_new_user = db_user + "_new"
             rendered_text = render_to_string('dashboard/all', {
                 'domain' : terraform_public_dns,
@@ -154,7 +157,7 @@ def añadir_nuevo_servidor(request):
             subprocess.run(["/usr/bin/ansible-playbook", "/opt/ansible/autoinstall.yml"]) # Instalará los ansible_playbooks y además los ejecutará pasandole las variables
 
             new_server = Servidor.objects.create(
-                id=name,
+                id=name.replace("_","."),
                 name=terraform_public_dns,
                 cms_type=cms_type, 
                 server_type=server_type, 
@@ -162,7 +165,8 @@ def añadir_nuevo_servidor(request):
                 user_admin_id=Admin, 
                 )
             
-            return render(request, 'dashboard/index.html', {})
+            #return render(request, 'dashboard/index.html', {})
+            return redirect("index")
         else:
             return render(request, 'dashboard/add_new_server.html', {'form' : form})
     elif request.method == 'GET':
