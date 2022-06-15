@@ -43,7 +43,7 @@
     size : 4096
     state : present
     force : no
-
+ 
 - name: Encuentra la versión más actualizada de terraform
   uri:
     url: https://releases.hashicorp.com/terraform/index.json
@@ -68,9 +68,6 @@
     dest: "/usr/local/bin"
     remote_src: yes
 
-- name : Instala AWS CLI
-  shell : curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"; unzip /tmp/awscliv2.zip; ./tmp/aws/install
-
 - name: Instalar paquetes necesarios
   apt: pkg={{ item }}
   with_items:
@@ -80,17 +77,12 @@
     - git
     - unzip
     - ansible
-    - 
+    - python3-venv 
 
-- name : Instalar módulo de venv
-  pip: name={{ item }}
-  with_items:
-    - python3-venv
-
-- name : Crear entorno virtual de la aplicación
-  pip : 
-    virtualenv : /opt/app/.venv
-    requirements : /tmp/app/requirements.txt
+- name : Crear el directorio del venv
+  file:
+    name : /opt/app/.venv
+    state : directory
 
 - name : Mover los archivos de la aplicación a su carpeta correspondiente
   copy : src=/tmp/app/ dest=/opt/app/
